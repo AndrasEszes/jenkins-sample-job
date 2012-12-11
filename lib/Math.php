@@ -38,6 +38,14 @@ class Math {
                 }
                 return $ret;
         }
+        
+        public function avg() {
+                $sum = array_sum(func_get_args());
+                $db = func_num_args();
+                if( $db == 0 )
+                        return 0;
+                return $sum/$db;
+        }
 }
 
 ?>

@@ -50,6 +50,18 @@ class MathTest extends PHPUnit_Framework_TestCase {
                 $this->assertEquals(0, $this->_math->division('foo','bar'));
                 $this->assertEquals(0, $this->_math->division('foo','bar',14));
         }
+        
+        public function testAvg() {
+                $this->assertEquals(0,$this->_math->avg(0,0));
+                $this->assertEquals(4,$this->_math->avg(11,3,0,2));
+                $this->assertEquals(2.5,$this->_math->avg(2,3));
+                $this->assertEquals(0,$this->_math->avg(-10,+10));
+                $this->assertEquals(2.56,$this->_math->avg(2.07,3.05));
+                $this->assertEquals(2.145,$this->_math->avg(2.07,3.05,-2.12,5.58));
+                $this->assertEquals(0, $this->_math->avg('foo','bar'));
+                $this->assertEquals(14/3, $this->_math->avg('foo','bar',14));
+                $this->assertEquals(0, $this->_math->avg());
+        }
 }
 
 ?>
