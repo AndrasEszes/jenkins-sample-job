@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="jenkins-sample-job" default="build">
-        <property name="builddir" value="${basedir}/build" />
-        <property name="srcdir" value="${basedir}/lib" />
-        <property name="testdir" value="${basedir}/tests" />
-  
         <target name="build"
          depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
 
@@ -25,33 +21,32 @@
         </target>
 
         <target name="clean" description="Cleanup build artifacts">
-                <delete dir="${builddir}/api"/>
-                <delete dir="${builddir}/code-browser"/>
-                <delete dir="${builddir}/coverage"/>
-                <delete dir="${builddir}/logs"/>
-                <delete dir="${builddir}/pdepend"/>
-                <delete dir="${builddir}/phpdox"/>
+                <delete dir="${basedir}/build/api"/>
+                <delete dir="${basedir}/build/code-browser"/>
+                <delete dir="${basedir}/build/coverage"/>
+                <delete dir="${basedir}/build/logs"/>
+                <delete dir="${basedir}/build/pdepend"/>
         </target>
 
         <target name="prepare" depends="clean" description="Prepare for build">
-                <mkdir dir="${builddir}/api"/>
-                <mkdir dir="${builddir}/code-browser"/>
-                <mkdir dir="${builddir}/coverage"/>
-                <mkdir dir="${builddir}/logs"/>
-                <mkdir dir="${builddir}/pdepend"/>
-                <mkdir dir="${builddir}/phpdox"/>
+                <mkdir dir="${basedir}/build/api"/>
+                <mkdir dir="${basedir}/build/code-browser"/>
+                <mkdir dir="${basedir}/build/coverage"/>
+                <mkdir dir="${basedir}/build/logs"/>
+                <mkdir dir="${basedir}/build/pdepend"/>
+                <mkdir dir="${basedir}/build/phpdox"/>
         </target>
 
         <target name="lint" description="Perform syntax check of sourcecode files">
                 <apply executable="php" failonerror="true">
                         <arg value="-l" />
 
-                        <fileset dir="${srcdir}">
+                        <fileset dir="${basedir}/lib">
                                 <include name="**/*.php" />
                                 <modified />
                         </fileset>
 
-                        <fileset dir="${testdir}">
+                        <fileset dir="${basedir}/tests">
                                 <include name="**/*.php" />
                                 <modified />
                         </fileset>
@@ -61,70 +56,61 @@
         <target name="phploc" description="Measure project size using PHPLOC">
                 <exec executable="phploc">
                         <arg value="--log-csv" />
-                        <arg value="${builddir}/logs/phploc.csv" />
-                        <arg path="${srcdir}" />
+                        <arg value="${basedir}/build/logs/phploc.csv" />
+                        <arg path="${basedir}/lib" />
                 </exec>
         </target>
 
         <target name="pdepend" description="Calculate software metrics using PHP_Depend">
                 <exec executable="pdepend">
-                        <arg value="--jdepend-xml=${builddir}/logs/jdepend.xml" />
-                        <arg value="--jdepend-chart=${builddir}/pdepend/dependencies.svg" />
-                        <arg value="--overview-pyramid=${builddir}/pdepend/overview-pyramid.svg" />
-                        <arg value="--suffix=php" />
-                        <arg path="${srcdir}" />
+                        <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+                        <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+                        <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+                        <arg path="${basedir}/lib" />
                 </exec>
         </target>
 
         <target name="phpmd"
          description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
                 <exec executable="phpmd">
-                        <arg value="--suffixes" />
-                        <arg value="php" />
-                        <arg path="${srcdir}" />
+                        <arg path="${basedir}/lib" />
                         <arg value="text" />
-                        <arg value="${builddir}/phpmd.xml" />
+                        <arg value="${basedir}/build/phpmd.xml" />
                 </exec>
         </target>
 
         <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
                 <exec executable="phpmd">
-                        <arg value="--suffixes" />
-                        <arg value="php" />
-                        <arg path="${srcdir}" />
+                        <arg path="${basedir}/lib" />
                         <arg value="xml" />
-                        <arg value="${builddir}/phpmd.xml" />
+                        <arg value="${basedir}/build/phpmd.xml" />
                         <arg value="--reportfile" />
-                        <arg value="${builddir}/logs/pmd.xml" />
+                        <arg value="${basedir}/build/logs/pmd.xml" />
                 </exec>
         </target>
 
         <target name="phpcs"
          description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
                 <exec executable="phpcs">
-                        <arg value="--extensions=php" />
-                        <arg value="--standard=${builddir}/phpcs.xml" />
-                        <arg path="${srcdir}" />
+                        <arg value="--standard=${basedir}/build/phpcs.xml" />
+                        <arg path="${basedir}/lib" />
                 </exec>
         </target>
 
         <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
                 <exec executable="phpcs" output="/dev/null">
-                        <arg value="--extensions=php" />
                         <arg value="--report=checkstyle" />
-                        <arg value="--report-file=${builddir}/logs/checkstyle.xml" />
-                        <arg value="--standard=${builddir}/phpcs.xml" />
-                        <arg path="${srcdir}" />
+                        <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+                        <arg value="--standard=${basedir}/build/phpcs.xml" />
+                        <arg path="${basedir}/lib" />
                 </exec>
         </target>
 
         <target name="phpcpd" description="Find duplicate code using PHPCPD">
                 <exec executable="phpcpd">
-                        <arg value="--suffixes" />
-                        <arg value="php" />
                         <arg value="--log-pmd" />
-                        <arg value="${builddir}/logs/pmd-cpd.xml" />
-                        <arg path="${srcdir}" />
+                        <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+                        <arg path="${basedir}/lib" />
                 </exec>
         </target>
 
@@ -133,18 +119,17 @@
         </target>
 
         <target name="phpunit" description="Run unit tests with PHPUnit">
-                <exec executable="phpunit" failonerror="false"/>
+                <exec executable="phpunit" failonerror="true"/>
         </target>
 
         <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
                 <exec executable="phpcb">
-                        <arg value="--extensions=php" />
                         <arg value="--log" />
-                        <arg path="${builddir}/logs" />
+                        <arg path="${basedir}/build/logs" />
                         <arg value="--source" />
-                        <arg path="${srcdir}" />
+                        <arg path="${basedir}/lib" />
                         <arg value="--output" />
-                        <arg path="${builddir}/code-browser" />
+                        <arg path="${basedir}/build/code-browser" />
                 </exec>
         </target>
 </project>
