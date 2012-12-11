@@ -46,6 +46,10 @@ class Math {
                         return 0;
                 return $sum/$db;
         }
+        
+        public function exponentiation($base,$power) {
+                return pow($base,$power);
+        }
 }
 
 ?>
