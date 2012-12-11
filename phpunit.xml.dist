@@ -7,8 +7,8 @@
          verbose="true"
          timeoutForSmallTests="5">
   <testsuites>
-    <testsuite name="Math">
-      <directory suffix="Test.php">tests</directory>
+    <testsuite name="MathTest">
+      <file>tests/MathTest.php</file>
     </testsuite>
   </testsuites>
   
