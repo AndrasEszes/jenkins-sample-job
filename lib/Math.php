@@ -104,6 +104,13 @@ class Math {
         public function exponentiation($base,$power) {
                 return pow($base,$power);
         }
+        
+        public function dummyMethod($number) {
+                if( $number > 10 )
+                        return 10;
+                else
+                        return 0;
+        }
 }
 
 ?>
