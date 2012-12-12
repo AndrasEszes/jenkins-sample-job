@@ -71,6 +71,10 @@ class MathTest extends PHPUnit_Framework_TestCase {
                 $this->assertEquals(1, $this->_math->exponentiation(123.456, 0));
                 $this->assertEquals(100, $this->_math->exponentiation(10, 2));
         }
+        
+        public function testDummyMethod() {
+                $this->assertEquals(10, $this->_math->dummyMethod(113));
+        }
 }
 
 ?>
