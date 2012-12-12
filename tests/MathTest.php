@@ -74,6 +74,7 @@ class MathTest extends PHPUnit_Framework_TestCase {
         
         public function testDummyMethod() {
                 $this->assertEquals(10, $this->_math->dummyMethod(113));
+                $this->assertEquals(0, $this->_math->dummyMethod(5));
         }
 }
 
