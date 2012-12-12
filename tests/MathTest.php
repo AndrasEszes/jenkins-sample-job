@@ -1,4 +1,7 @@
 <?php
+/**
+ * @property Math $_math Math objektum
+ */
 class MathTest extends PHPUnit_Framework_TestCase {
         private $_math;
         
@@ -61,6 +64,12 @@ class MathTest extends PHPUnit_Framework_TestCase {
                 $this->assertEquals(0, $this->_math->avg('foo','bar'));
                 $this->assertEquals(14/3, $this->_math->avg('foo','bar',14));
                 $this->assertEquals(0, $this->_math->avg());
+        }
+        
+        public function testExponentiation() {
+                $this->assertEquals(0, $this->_math->exponentiation(0, 123));
+                $this->assertEquals(1, $this->_math->exponentiation(123.456, 0));
+                $this->assertEquals(100, $this->_math->exponentiation(10, 2));
         }
 }
 
